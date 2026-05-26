@@ -1,5 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+if (!process.env.GEMINI_API_KEY) {
+  console.log("no gemini key");
+  throw new Error(
+    "Missing GEMINI_API_KEY inside backend environmental parameters.",
+  );
+}
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
 export interface ItineraryDay {
@@ -29,7 +36,12 @@ export const generateItinerary = async (
   groupSize: number = 2,
   budget: string = "mid-range",
 ): Promise<GeneratedItinerary> => {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  // Ordered fallback models to bypass temporary 503 high-demand errors
+  const modelsToTry = [
+    "gemini-2.5-flash",
+    "gemini-1.5-flash-latest",
+    "gemini-1.5-pro-latest",
+  ];
 
   const prompt = `You are an expert luxury travel consultant for Sri Lanka with deep local knowledge.
   
@@ -63,19 +75,39 @@ Return ONLY a valid JSON object (no markdown, no explanation) matching this exac
 Focus on authentic, off-the-beaten-path experiences alongside iconic landmarks.
 Include cultural insights and practical tips. Make it feel premium and exclusive.`;
 
-  const result = await model.generateContent(prompt);
-  const text = result.response.text();
+  let lastError: any = null;
 
-  // Clean the response — sometimes Gemini wraps JSON in markdown backticks
-  const cleaned = text
-    .replace(/```json\n?/g, "")
-    .replace(/```\n?/g, "")
-    .trim();
+  // Dynamically iterate through candidate models if one encounters a spike
+  for (const modelName of modelsToTry) {
+    try {
+      console.log(`🤖 Attempting generation with model: ${modelName}`);
 
-  try {
-    const itinerary = JSON.parse(cleaned) as GeneratedItinerary;
-    return itinerary;
-  } catch {
-    throw new Error("AI returned invalid JSON. Please try again.");
+      const model = genAI.getGenerativeModel({ model: modelName });
+      const result = await model.generateContent(prompt);
+      const text = result.response.text();
+
+      if (!text) {
+        throw new Error("Empty payload returned.");
+      }
+
+      // Clean the response — sometimes Gemini wraps JSON in markdown backticks
+      const cleaned = text
+        .replace(/```json\n?/g, "")
+        .replace(/```\n?/g, "")
+        .trim();
+
+      const itinerary = JSON.parse(cleaned) as GeneratedItinerary;
+      return itinerary;
+    } catch (error: any) {
+      console.warn(
+        `⚠️ Model ${modelName} failed. Error: ${error.message || error}`,
+      );
+      lastError = error;
+      continue; // Fall through to the next model layout definition
+    }
   }
+
+  throw new Error(
+    `All available Gemini models failed to respond. Last error: ${lastError?.message || lastError}`,
+  );
 };
