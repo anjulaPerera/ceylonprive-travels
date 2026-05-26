@@ -109,7 +109,7 @@ export default function Experience() {
               <div
                 key={stat.label}
                 className={cn(
-                  "border border-gold/20 p-8 hover:border-gold/50 transition-all duration-500 group",
+                  "border border-gold/20 p-8 hover:border-gold/50 hover:bg-navy-mid/30 group",
                   "transition-all duration-700",
                   isVisible
                     ? "opacity-100 translate-y-0"

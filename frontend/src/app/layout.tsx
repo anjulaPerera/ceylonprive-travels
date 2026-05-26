@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
-import { Toaster } from "react-hot-toast";
+import ToasterProvider from "@/components/layout/ToasterProvider";
 import "./globals.css";
 
-// Load Cormorant Garamond — luxury serif for headings
-// We load multiple weights for design flexibility
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-cormorant", // CSS variable we reference in Tailwind
+  variable: "--font-cormorant",
   display: "swap",
 });
 
-// Load Inter — clean sans-serif for body text
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -43,24 +40,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      // Apply both font variables to the HTML element so Tailwind
-      // can access them via the font-serif and font-sans utilities
       className={`${cormorant.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
       <body className="bg-navy text-cream font-sans antialiased">
         {children}
-        {/* Toaster sits here so toast notifications work everywhere */}
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: "#1E2640",
-              color: "#F5F0E8",
-              border: "1px solid #C9A84C",
-            },
-          }}
-        />
+        <ToasterProvider />
       </body>
     </html>
   );
