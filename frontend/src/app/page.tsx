@@ -2,6 +2,10 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/landing/Hero";
 import Experience from "@/components/landing/Experience";
+import GallerySection from "@/components/landing/GallerySection";
+import AIPlanner from "@/components/landing/AIPlanner";
+import ReviewsSection from "@/components/landing/ReviewsSection";
+import ContactSection from "@/components/landing/ContactSection";
 
 export default function HomePage() {
   return (
@@ -9,7 +13,10 @@ export default function HomePage() {
       <Navbar />
       <Hero />
       <Experience />
-      {/* Gallery, AI Planner, Reviews, Contact sections coming next */}
+      <GallerySection />
+      <AIPlanner />
+      <ReviewsSection />
+      <ContactSection />
       <Footer />
     </main>
   );
