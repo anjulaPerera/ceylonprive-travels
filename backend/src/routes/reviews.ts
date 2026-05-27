@@ -126,7 +126,7 @@ router.patch(
       const { isApproved, isPublished } = req.body;
 
       const review = await prisma.review.update({
-        where: { id: req.params.id },
+        where: { id: String(req.params.id) },
         data: { isApproved, isPublished },
       });
 

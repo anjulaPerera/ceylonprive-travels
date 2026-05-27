@@ -70,7 +70,7 @@ router.get(
   "/verify/:token",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await verifyReviewToken(req.params.token);
+      const result = await verifyReviewToken(String(req.params.token));
 
       if (!result.valid) {
         res.status(400).json({ valid: false, reason: result.reason });
@@ -96,13 +96,13 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const token = await prisma.reviewToken.findUnique({
-        where: { id: req.params.id },
+        where: { id: String(req.params.id) },
       });
 
       if (!token) throw new AppError("Token not found", 404);
       if (token.usedAt) throw new AppError("Cannot delete a used token", 400);
 
-      await prisma.reviewToken.delete({ where: { id: req.params.id } });
+      await prisma.reviewToken.delete({ where: { id: String(req.params.id) } });
       res.json({ message: "Token revoked successfully" });
     } catch (error) {
       next(error);
