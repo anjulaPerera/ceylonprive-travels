@@ -17,10 +17,16 @@ const contactSchema = z.object({
   country: z.string().optional(),
   message: z.string().min(10, "Please tell us a bit more"),
   tripType: z.string().optional(),
-  duration: z.coerce.number().optional(),
+  preferredContact: z.string().min(1, "Please select a contact method"),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
+
+const contactMethodOptions = [
+  { value: "email", label: "Email" },
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "phone", label: "Phone Call" },
+];
 
 export default function ContactSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -32,7 +38,6 @@ export default function ContactSection() {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
   });
@@ -54,25 +59,16 @@ export default function ContactSection() {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
     try {
-      // Check if the user came from the AI planner
-      const storedItinerary = sessionStorage.getItem("ceylonprive_itinerary");
-      const aiGeneratedPlan = storedItinerary
-        ? JSON.parse(storedItinerary)
-        : undefined;
-
       await api.post("/api/contact", {
         ...data,
-        aiGeneratedPlan,
         interests: [],
+        message: `Preferred contact: ${data.preferredContact}. ${data.message}`,
       });
-
+      // Set submitted state FIRST — this triggers the conditional render
       setIsSubmitted(true);
-      reset();
-      sessionStorage.removeItem("ceylonprive_itinerary");
       toast.success("Message sent! We will be in touch within 24 hours.");
     } catch {
       toast.error("Failed to send message. Please try again.");
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -106,14 +102,9 @@ export default function ContactSection() {
           </div>
         </div>
 
+        {/* Conditional render — this is what fixes the refresh bug */}
         {isSubmitted ? (
-          /* Success State */
-          <div
-            className={cn(
-              "border border-gold/30 p-16 text-center bg-navy-light transition-all duration-700",
-              isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95",
-            )}
-          >
+          <div className="border border-gold/30 p-16 text-center bg-navy-light">
             <div className="text-gold text-5xl mb-6">✦</div>
             <h3 className="font-serif text-3xl text-cream font-light mb-4">
               Thank You
@@ -124,7 +115,6 @@ export default function ContactSection() {
             </p>
           </div>
         ) : (
-          /* Contact Form */
           <div
             className={cn(
               "border border-gold/20 p-8 md:p-12 bg-navy-light transition-all duration-1000 delay-200",
@@ -134,7 +124,7 @@ export default function ContactSection() {
             )}
           >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Name Row */}
+              {/* Name */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-xs tracking-widest uppercase text-gold font-sans mb-2">
@@ -145,7 +135,7 @@ export default function ContactSection() {
                     className={cn(
                       "w-full bg-navy border px-4 py-3 text-cream font-sans font-light text-sm focus:outline-none transition-colors",
                       errors.firstName
-                        ? "border-red-500/50 focus:border-red-500"
+                        ? "border-red-500/50"
                         : "border-gold/20 focus:border-gold",
                     )}
                     placeholder="James"
@@ -165,7 +155,7 @@ export default function ContactSection() {
                     className={cn(
                       "w-full bg-navy border px-4 py-3 text-cream font-sans font-light text-sm focus:outline-none transition-colors",
                       errors.lastName
-                        ? "border-red-500/50 focus:border-red-500"
+                        ? "border-red-500/50"
                         : "border-gold/20 focus:border-gold",
                     )}
                     placeholder="Anderson"
@@ -190,7 +180,7 @@ export default function ContactSection() {
                     className={cn(
                       "w-full bg-navy border px-4 py-3 text-cream font-sans font-light text-sm focus:outline-none transition-colors",
                       errors.email
-                        ? "border-red-500/50 focus:border-red-500"
+                        ? "border-red-500/50"
                         : "border-gold/20 focus:border-gold",
                     )}
                     placeholder="james@example.com"
@@ -203,7 +193,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <label className="block text-xs tracking-widest uppercase text-gold font-sans mb-2">
-                    Phone (Optional)
+                    Phone / WhatsApp
                   </label>
                   <input
                     {...register("phone")}
@@ -244,6 +234,33 @@ export default function ContactSection() {
                 </div>
               </div>
 
+              {/* Preferred Contact Method */}
+              <div>
+                <label className="block text-xs tracking-widest uppercase text-gold font-sans mb-3">
+                  Preferred Contact Method *
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  {contactMethodOptions.map((method) => (
+                    <label key={method.value} className="cursor-pointer">
+                      <input
+                        {...register("preferredContact")}
+                        type="radio"
+                        value={method.value}
+                        className="sr-only peer"
+                      />
+                      <div className="border border-gold/20 px-4 py-3 text-center text-xs tracking-wide font-sans text-cream-dark peer-checked:border-gold peer-checked:text-gold peer-checked:bg-gold/10 transition-all duration-200 cursor-pointer">
+                        {method.label}
+                      </div>
+                    </label>
+                  ))}
+                </div>
+                {errors.preferredContact && (
+                  <p className="text-red-400 text-xs font-sans mt-1">
+                    {errors.preferredContact.message}
+                  </p>
+                )}
+              </div>
+
               {/* Message */}
               <div>
                 <label className="block text-xs tracking-widest uppercase text-gold font-sans mb-2">
@@ -255,10 +272,10 @@ export default function ContactSection() {
                   className={cn(
                     "w-full bg-navy border px-4 py-3 text-cream font-sans font-light text-sm focus:outline-none transition-colors resize-none",
                     errors.message
-                      ? "border-red-500/50 focus:border-red-500"
+                      ? "border-red-500/50"
                       : "border-gold/20 focus:border-gold",
                   )}
-                  placeholder="Share your vision — places you'd love to see, experiences that matter, any special occasions..."
+                  placeholder="Share your vision — places you'd love to see, experiences that matter..."
                 />
                 {errors.message && (
                   <p className="text-red-400 text-xs font-sans mt-1">
