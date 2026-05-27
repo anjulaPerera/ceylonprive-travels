@@ -79,5 +79,4 @@ export interface GeneratedItinerary {
   highlights: string[];
   days: ItineraryDay[];
   bestTimeToVisit: string;
-  estimatedBudget: string;
 }
