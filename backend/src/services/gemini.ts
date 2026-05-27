@@ -43,12 +43,17 @@ export const generateItinerary = async (
     "gemini-1.5-pro-latest",
   ];
 
-  const prompt = `You are an expert luxury travel consultant for Sri Lanka with deep local knowledge.
-  
+ const prompt = `You are an expert luxury travel consultant for Sri Lanka with deep local knowledge.
+
 Create a detailed ${days}-day Sri Lanka travel itinerary for the following:
 - Group size: ${groupSize} people
 - Interests: ${interests.join(", ")}
-- Budget level: ${budget}
+- Experience level: ${budget}
+
+IMPORTANT RULES:
+- Do NOT include any prices, costs, or budget estimates anywhere in the response
+- Focus on experiences, not money
+- Make it feel exclusive and curated
 
 Return ONLY a valid JSON object (no markdown, no explanation) matching this exact structure:
 {
@@ -68,8 +73,7 @@ Return ONLY a valid JSON object (no markdown, no explanation) matching this exac
       "travelTime": "travel time from previous location if applicable"
     }
   ],
-  "bestTimeToVisit": "month range recommendation",
-  "estimatedBudget": "per person budget estimate in USD"
+  "bestTimeToVisit": "month range recommendation"
 }
 
 Focus on authentic, off-the-beaten-path experiences alongside iconic landmarks.
