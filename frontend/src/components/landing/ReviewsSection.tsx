@@ -157,20 +157,25 @@ export default function ReviewsSection() {
         )}
 
         {/* TripAdvisor CTA */}
+        {/* TripAdvisor CTA */}
         <div
           className={cn(
             "text-center mt-12 transition-all duration-1000 delay-500",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
           )}
         >
-          <a // 👈 Added missing anchor open tag here
-            href="https://www.tripadvisor.com"
+          <p className="text-cream-dark font-sans font-light text-sm mb-4">
+            Read independent reviews on TripAdvisor
+          </p>
+
+          <a
+            href="https://www.tripadvisor.com/Profile/YOUR_PROFILE_HERE"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 text-sm tracking-[0.3em] uppercase font-sans text-cream-dark hover:text-gold transition-colors duration-300"
+            className="inline-flex items-center gap-3 px-8 py-3 border border-gold/30 text-sm tracking-[0.2em] uppercase font-sans text-cream-dark hover:border-gold hover:text-gold transition-all duration-300"
           >
-            Read More on TripAdvisor
-            <span className="h-px w-8 bg-current" />
+            View on TripAdvisor
+            <span className="h-px w-6 bg-current" />
           </a>
         </div>
       </div>
