@@ -132,7 +132,7 @@ router.patch(
       const { isPublished } = req.body;
 
       const item = await prisma.galleryItem.update({
-        where: { id },
+        where: { id: String(id) },
         data: { isPublished },
       });
 
@@ -154,7 +154,9 @@ router.delete(
     try {
       const { id } = req.params;
 
-      const item = await prisma.galleryItem.findUnique({ where: { id } });
+      const item = await prisma.galleryItem.findUnique({
+        where: { id: String(id) },
+      });
       if (!item) throw new AppError("Gallery item not found", 404);
 
       // Delete from Cloudinary first
@@ -164,7 +166,7 @@ router.delete(
       );
 
       // Then delete from database
-      await prisma.galleryItem.delete({ where: { id } });
+      await prisma.galleryItem.delete({ where: { id: String(id) } });
 
       res.json({ message: "Gallery item deleted successfully" });
     } catch (error) {

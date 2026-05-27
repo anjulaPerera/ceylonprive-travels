@@ -76,7 +76,7 @@ router.patch(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const submission = await prisma.contactSubmission.update({
-        where: { id: req.params.id },
+        where: { id: String(req.params.id) },
         data: { status: req.body.status },
       });
       res.json({ submission });

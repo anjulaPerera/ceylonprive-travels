@@ -60,9 +60,14 @@ app.use((_req, res) => {
 // Express identifies this as an error handler because it has 4 parameters
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`🌴 CeylonPrivé API running on port ${PORT}`);
-  console.log(`📍 Environment: ${process.env.NODE_ENV}`);
-});
+// Only start the server if this file is run directly,
+// not when it's imported by tests (Jest imports the module directly)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🌴 CeylonPrivé API running on port ${PORT}`);
+    console.log(`📍 Environment: ${process.env.NODE_ENV}`);
+  });
+}
+
 
 export default app;
