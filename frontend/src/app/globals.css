@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Variables ───────────────────────────────────────────── */
+:root {
+  --font-cormorant: "Cormorant Garamond", Georgia, serif;
+  --font-inter: "Inter", system-ui, sans-serif;
+}
+
+/* ── Base Styles ─────────────────────────────────────────────── */
+@layer base {
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #0A0F1E;
+    color: #F5F0E8;
+    font-family: var(--font-inter);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings use the luxury serif font */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-cormorant);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  /* Custom text selection color */
+  ::selection {
+    background-color: #C9A84C;
+    color: #0A0F1E;
+  }
+}
+
+/* ── Custom Scrollbar ────────────────────────────────────────── */
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0A0F1E;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #C9A84C;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #E8D08A;
+  }
+
+  /* Gold gradient text — used for the brand name */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #C9A84C 0%, #E8D08A 50%, #C9A84C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Subtle gold border glow — used on cards and inputs */
+  .border-gold-glow {
+    box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.3),
+      0 4px 20px rgba(201, 168, 76, 0.1);
+  }
+
+  /* Glass morphism effect — used on navbar and cards */
+  .glass {
+    background: rgba(10, 15, 30, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(201, 168, 76, 0.15);
+  }
+
+  /* Opacity-0 initial state for animations */
+  .animate-fade-up {
+    opacity: 0;
+  }
+}
+
+/* ── Light Mode Overrides ────────────────────────────────────── */
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  .light body,
+  [data-theme="light"] body {
+    background-color: #F5F0E8;
+    color: #0A0F1E;
+  }
+}
+
+/* Light mode section backgrounds */
+html:not(.dark) .bg-navy {
+  background-color: #F5F0E8;
+}
+
+html:not(.dark) .bg-navy-light {
+  background-color: #EDE8DF;
+}
+
+html:not(.dark) .text-cream {
+  color: #0A0F1E;
+}
+
+html:not(.dark) .text-cream-dark {
+  color: #3D3520;
+}
+
+html:not(.dark) .border-gold\/20 {
+  border-color: rgba(160, 120, 48, 0.3);
+}
+
+html:not(.dark) .glass {
+  background: rgba(245, 240, 232, 0.85);
+  border-color: rgba(160, 120, 48, 0.2);
+}
