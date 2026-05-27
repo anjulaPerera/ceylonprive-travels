@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import ToasterProvider from "@/components/layout/ToasterProvider";
 import "./globals.css";
 
@@ -43,9 +44,15 @@ export default function RootLayout({
       className={`${cormorant.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-navy text-cream font-sans antialiased">
-        {children}
-        <ToasterProvider />
+      <body className="bg-navy text-cream font-sans antialiased dark:bg-navy dark:text-cream light:bg-cream light:text-navy transition-colors duration-300">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+        >
+          {children}
+          <ToasterProvider />
+        </ThemeProvider>
       </body>
     </html>
   );

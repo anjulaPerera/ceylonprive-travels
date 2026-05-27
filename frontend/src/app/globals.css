@@ -93,3 +93,42 @@
     opacity: 0;
   }
 }
+
+/* ── Light Mode Overrides ────────────────────────────────────── */
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  .light body,
+  [data-theme="light"] body {
+    background-color: #F5F0E8;
+    color: #0A0F1E;
+  }
+}
+
+/* Light mode section backgrounds */
+html:not(.dark) .bg-navy {
+  background-color: #F5F0E8;
+}
+
+html:not(.dark) .bg-navy-light {
+  background-color: #EDE8DF;
+}
+
+html:not(.dark) .text-cream {
+  color: #0A0F1E;
+}
+
+html:not(.dark) .text-cream-dark {
+  color: #3D3520;
+}
+
+html:not(.dark) .border-gold\/20 {
+  border-color: rgba(160, 120, 48, 0.3);
+}
+
+html:not(.dark) .glass {
+  background: rgba(245, 240, 232, 0.85);
+  border-color: rgba(160, 120, 48, 0.2);
+}

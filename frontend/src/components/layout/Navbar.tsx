@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 const navLinks = [
   { label: "Experience", href: "#experience" },
@@ -60,6 +61,7 @@ export default function Navbar() {
 
         {/* CTA Button */}
         <div className="hidden md:flex items-center gap-4">
+          <ThemeToggle />
           <a
             href="#contact"
             className="px-6 py-2.5 border border-gold text-gold text-sm tracking-widest uppercase font-sans font-light hover:bg-gold hover:text-navy transition-all duration-300"
@@ -93,6 +95,12 @@ export default function Navbar() {
                 </a>
               </li>
             ))}
+            <li className="flex items-center justify-between">
+              <span className="text-xs tracking-widest uppercase text-cream-dark/60 font-sans">
+                Theme
+              </span>
+              <ThemeToggle />
+            </li>
             <li>
               <a
                 href="#contact"
