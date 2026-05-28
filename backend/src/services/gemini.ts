@@ -1,13 +1,17 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-if (!process.env.GEMINI_API_KEY) {
-  console.log("no gemini key");
-  throw new Error(
-    "Missing GEMINI_API_KEY inside backend environmental parameters.",
-  );
+function getGeminiClient() {
+
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error(
+      "Missing GEMINI_API_KEY inside backend environmental parameters.",
+    );
+  }
+
+   return new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 }
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
+const genAI = getGeminiClient();
 
 export interface ItineraryDay {
   day: number;
