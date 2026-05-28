@@ -1,8 +1,8 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { z } from "zod";
-import { validate } from "../middleware/validate";
-import { aiLimiter } from "../middleware/rateLimiter";
-import { generateItinerary } from "../services/gemini";
+import { validate } from "../middleware/validate.js";
+import { aiLimiter } from "../middleware/rateLimiter.js";
+import { generateItinerary } from "../services/gemini.js";
 
 const router = Router();
 

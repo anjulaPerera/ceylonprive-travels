@@ -1,14 +1,14 @@
 import { Router, Request, Response, NextFunction } from "express";
 import multer from "multer";
 import { z } from "zod";
-import prisma from "../db/client";
-import { authenticate } from "../middleware/auth";
-import { validate } from "../middleware/validate";
-import { AppError } from "../middleware/errorHandler";
+import prisma from "../db/client.js";
+import { authenticate } from "../middleware/auth.js";
+import { validate } from "../middleware/validate.js";
+import { AppError } from "../middleware/errorHandler.js";
 import {
   uploadToCloudinary,
   deleteFromCloudinary,
-} from "../services/cloudinary";
+} from "../services/cloudinary.js";
 
 const router = Router();
 

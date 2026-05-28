@@ -3,13 +3,16 @@ name: CI — CeylonPrivé Travels
 on:
   push:
     branches: ['*']
+
   pull_request:
     branches: [main, develop]
 
 jobs:
+
   backend:
-    name: Backend — Type Check
+    name: Backend — Type Check • Build • Test
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: backend
@@ -34,9 +37,17 @@ jobs:
       - name: TypeScript type check
         run: npm run type-check
 
+      - name: Build backend
+        run: npm run build
+
+      - name: Run backend tests
+        run: npm run test
+
+
   frontend:
     name: Frontend — Type Check & Lint
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: frontend
