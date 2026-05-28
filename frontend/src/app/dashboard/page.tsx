@@ -1,46 +1,51 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
-import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
-import { Loader2 } from "lucide-react";
+import { Mail, Image as ImageIcon, Star } from "lucide-react";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const { isAuthenticated, isLoading } = useAuth();
-  const router = useRouter();
+export default function DashboardOverviewPage() {
+  return (
+    <div className="p-8 space-y-6">
+      <div>
+        <h1 className="font-serif text-4xl text-cream font-light">
+          Dashboard Overview
+        </h1>
+        <p className="text-cream-dark font-sans font-light text-sm mt-1">
+          Welcome back to your CeylonPrivé Guide Dashboard.
+        </p>
+      </div>
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push("/admin/login");
-    }
-  }, [isAuthenticated, isLoading, router]);
+      {/* Grid for Quick Metrics/Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="border border-gold/10 bg-navy-light p-6 space-y-2">
+          <div className="flex justify-between text-gold">
+            <span className="text-xs uppercase tracking-widest font-sans">
+              Enquiries
+            </span>
+            <Mail size={18} />
+          </div>
+          <p className="font-serif text-2xl text-cream">Manage Submissions</p>
+        </div>
 
-  // Show loading spinner while checking auth
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-navy flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 size={32} className="text-gold animate-spin" />
-          <p className="text-cream-dark font-sans text-sm tracking-widest">
-            Loading...
-          </p>
+        <div className="border border-gold/10 bg-navy-light p-6 space-y-2">
+          <div className="flex justify-between text-gold">
+            <span className="text-xs uppercase tracking-widest font-sans">
+              Gallery
+            </span>
+            <ImageIcon size={18} />
+          </div>
+          <p className="font-serif text-2xl text-cream">Media Assets</p>
+        </div>
+
+        <div className="border border-gold/10 bg-navy-light p-6 space-y-2">
+          <div className="flex justify-between text-gold">
+            <span className="text-xs uppercase tracking-widest font-sans">
+              Reviews
+            </span>
+            <Star size={18} />
+          </div>
+          <p className="font-serif text-2xl text-cream">Customer Feedback</p>
         </div>
       </div>
-    );
-  }
-
-  // Don't render dashboard until authenticated
-  if (!isAuthenticated) return null;
-
-  return (
-    <div className="flex min-h-screen bg-navy">
-      <DashboardSidebar />
-      <main className="flex-1 overflow-auto">{children}</main>
     </div>
   );
 }
