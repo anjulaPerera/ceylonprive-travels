@@ -18,7 +18,8 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import { generalLimiter } from "./middleware/rateLimiter.js";
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+// Parse the string environment variable cleanly into an integer number
+const PORT = parseInt(process.env.PORT || "4000", 10);
 
 // ── Security middleware ───────────────────────────────────────
 app.use(helmet());
@@ -100,13 +101,17 @@ app.use(errorHandler);
 //   });
 // }
 
+// Check if running directly in ESM, or if forced inside a production cloud container
 const isMainESM =
-  process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
+  process.argv[1] && 
+  (fileURLToPath(import.meta.url) === process.argv[1] || 
+   process.argv[1].endsWith('dist/index.js'));
 
-  if (isMainESM) {
-    app.listen(PORT, () => {
-      console.log(`Server running on ${PORT}`);
-    });
-  }
+if (isMainESM || process.env.NODE_ENV === "production") {
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`🌴 CeylonPrivé API running on port ${PORT}`);
+    console.log(`📍 Environment: ${process.env.NODE_ENV || 'production'}`);
+  });
+}
 
 export default app;
