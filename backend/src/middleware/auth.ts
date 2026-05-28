@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import prisma from "../db/client";
+import prisma from "../db/client.js";
 
 // The shape of data we encode inside the JWT
 interface JwtPayload {

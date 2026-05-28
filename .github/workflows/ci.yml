@@ -8,11 +8,39 @@ on:
 
 jobs:
   backend:
-    name: Backend — Type Check
+    name: Backend — Type Check • Build • Test
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: backend
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ceylonprive_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ceylonprive_test
+      DIRECT_URL: postgresql://postgres:postgres@localhost:5432/ceylonprive_test
+      JWT_SECRET: ci-test-secret-key-64-characters-long-for-testing-purposes-only-x
+      JWT_EXPIRES_IN: 7d
+      NODE_ENV: test
+      FRONTEND_URL: http://localhost:3000
+      GEMINI_API_KEY: test-key
+      CLOUDINARY_CLOUD_NAME: test
+      CLOUDINARY_API_KEY: test
+      CLOUDINARY_API_SECRET: test
+      INITIAL_ADMIN_PASSWORD: Admin@CeylonPrive2025!
 
     steps:
       - name: Checkout code
@@ -31,8 +59,20 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
+      - name: Run database migrations
+        run: npx prisma migrate deploy
+
+      - name: Seed test database
+        run: npx tsx prisma/seed.ts
+
       - name: TypeScript type check
         run: npm run type-check
+
+      - name: Build backend
+        run: npm run build
+
+      - name: Run backend tests
+        run: npm test
 
   frontend:
     name: Frontend — Type Check & Lint

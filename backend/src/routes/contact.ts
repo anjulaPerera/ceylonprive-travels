@@ -1,9 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { z } from "zod";
-import prisma from "../db/client";
-import { validate } from "../middleware/validate";
-import { authenticate } from "../middleware/auth";
-import { generalLimiter } from "../middleware/rateLimiter";
+import prisma from "../db/client.js";
+import { validate } from "../middleware/validate.js";
+import { authenticate } from "../middleware/auth.js";
+import { generalLimiter } from "../middleware/rateLimiter.js";
 
 const router = Router();
 

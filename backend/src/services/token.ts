@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import prisma from "../db/client";
+import prisma from "../db/client.js";
 
 // Generates a cryptographically secure review token and stores it in the DB.
 // Called from the tokens route when the guide clicks "Generate Review Link".

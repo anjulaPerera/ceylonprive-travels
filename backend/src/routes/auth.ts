@@ -2,11 +2,11 @@ import { Router, Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
-import prisma from "../db/client";
-import { validate } from "../middleware/validate";
-import { authLimiter } from "../middleware/rateLimiter";
-import { AppError } from "../middleware/errorHandler";
-import { authenticate } from "../middleware/auth";
+import prisma from "../db/client.js";
+import { validate } from "../middleware/validate.js";
+import { authLimiter } from "../middleware/rateLimiter.js";
+import { AppError } from "../middleware/errorHandler.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = Router();
 
