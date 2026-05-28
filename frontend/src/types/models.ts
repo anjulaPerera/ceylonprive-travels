@@ -59,6 +59,7 @@ export interface ContactSubmission {
   message?: string;
   status: "PENDING" | "VIEWED" | "REPLIED" | "CLOSED";
   createdAt: string;
+  aiGeneratedPlan?: string;
 }
 
 export interface ItineraryDay {
