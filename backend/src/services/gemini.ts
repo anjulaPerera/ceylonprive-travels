@@ -42,8 +42,10 @@ export const generateItinerary = async (
   // Ordered fallback models to bypass temporary 503 high-demand errors
   const modelsToTry = [
     "gemini-2.5-flash",
-    "gemini-1.5-flash-latest",
-    "gemini-1.5-pro-latest",
+    "gemini-2.5-flash-lite", // 2. Best Backup: Highly stable, lightning fast, ultra-budget friendly
+    "gemini-2.5-pro",
+    // "gemini-1.5-flash-latest",
+    // "gemini-1.5-pro-latest",
   ];
 
  const prompt = `You are an expert luxury travel consultant for Sri Lanka with deep local knowledge.
