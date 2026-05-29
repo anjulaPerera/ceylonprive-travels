@@ -39,29 +39,31 @@ export default function ReviewsDashboardPage() {
     fetchReviews();
   }, []);
 
-  const handleApproveToggle = async (review: DashboardReview) => {
-    const newApproved = !review.isApproved;
-    try {
-      await api.patch(`/api/reviews/${review.id}/approve`, {
-        isApproved: newApproved,
-        isPublished: newApproved ? review.isPublished : false,
-      });
-      setReviews((prev) =>
-        prev.map((r) =>
-          r.id === review.id
-            ? {
-                ...r,
-                isApproved: newApproved,
-                isPublished: newApproved ? r.isPublished : false,
-              }
-            : r,
-        ),
-      );
-      toast.success(newApproved ? "Review approved" : "Approval removed");
-    } catch {
-      toast.error("Failed to update review");
-    }
-  };
+const handleApproveToggle = async (review: DashboardReview) => {
+  const newApproved = !review.isApproved;
+  // Auto-publish when approving, auto-unpublish when removing approval
+  const newPublished = newApproved;
+  try {
+    await api.patch(`/api/reviews/${review.id}/approve`, {
+      isApproved: newApproved,
+      isPublished: newPublished,
+    });
+    setReviews((prev) =>
+      prev.map((r) =>
+        r.id === review.id
+          ? { ...r, isApproved: newApproved, isPublished: newPublished }
+          : r,
+      ),
+    );
+    toast.success(
+      newApproved
+        ? "Review approved and published to homepage"
+        : "Review removed from homepage",
+    );
+  } catch {
+    toast.error("Failed to update review");
+  }
+};
 
   const handlePublishToggle = async (review: DashboardReview) => {
     if (!review.isApproved) {
