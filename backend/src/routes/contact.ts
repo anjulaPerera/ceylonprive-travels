@@ -4,6 +4,7 @@ import prisma from "../db/client.js";
 import { validate } from "../middleware/validate.js";
 import { authenticate } from "../middleware/auth.js";
 import { generalLimiter } from "../middleware/rateLimiter.js";
+import { sendEnquiryNotification } from "../services/email.js";
 
 const router = Router();
 
@@ -40,6 +41,21 @@ router.post(
             : null,
         },
       });
+
+      // Notify guide via email — don't await, don't fail if it errors
+      sendEnquiryNotification({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        phone: req.body.phone,
+        country: req.body.country,
+        tripType: req.body.tripType,
+        groupSize: req.body.groupSize,
+        duration: req.body.duration,
+        message: req.body.message,
+        interests: req.body.interests ?? [],
+        hasAiPlan: !!req.body.aiGeneratedPlan,
+      }).catch((err) => console.error("Enquiry notification failed:", err));
 
       res.status(201).json({
         message: "Thank you! We will be in touch within 24 hours.",

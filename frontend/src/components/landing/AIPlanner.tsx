@@ -80,6 +80,8 @@ export default function AIPlanner() {
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [customerEmailName, setCustomerEmailName] = useState("");
   const sectionRef = useRef<HTMLElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -147,8 +149,13 @@ export default function AIPlanner() {
         interests: selectedInterests,
         groupSize,
         budget,
+        customerEmail: customerEmail.trim() || undefined,
+        customerName: customerEmailName.trim() || undefined,
       });
       setItinerary(response.data.itinerary);
+      if (response.data.emailSent) {
+        toast.success("Itinerary sent to your email!");
+      }
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({
           behavior: "smooth",
@@ -341,7 +348,31 @@ export default function AIPlanner() {
               </div>
             </div>
           </div>
-
+          {/* Email for itinerary delivery */}
+          <div className="border border-gold/10 bg-gold/5 p-4 mb-6">
+            <p className="text-xs tracking-widest uppercase text-gold font-sans mb-3">
+              Receive This Itinerary by Email (Optional)
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                value={customerEmail}
+                onChange={(e) => setCustomerEmail(e.target.value)}
+                type="email"
+                className="w-full bg-navy border border-gold/20 focus:border-gold px-4 py-3 text-cream font-sans font-light text-sm focus:outline-none transition-colors"
+                placeholder="your@email.com"
+              />
+              <input
+                value={customerEmailName}
+                onChange={(e) => setCustomerEmailName(e.target.value)}
+                className="w-full bg-navy border border-gold/20 focus:border-gold px-4 py-3 text-cream font-sans font-light text-sm focus:outline-none transition-colors"
+                placeholder="Your name"
+              />
+            </div>
+            <p className="text-cream-dark/50 text-xs font-sans mt-2">
+              We&apos;ll email you a beautifully formatted copy of your
+              itinerary.
+            </p>
+          </div>
           {/* Generate Button */}
           <button
             type="button"
