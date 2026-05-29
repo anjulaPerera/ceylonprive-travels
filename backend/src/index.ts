@@ -19,15 +19,45 @@ import { generalLimiter } from "./middleware/rateLimiter.js";
 
 const app = express();
 // Parse the string environment variable cleanly into an integer number
+
+const allowedOrigins: (string | RegExp)[] = [
+  "http://localhost:3000",
+  "https://ceylonprive-travels.vercel.app",
+  // 👑 Magic Regex: Matches any preview branch string generated under your Vercel team account!
+  /^https:\/\/ceylonprive-travels-git-.*-anjulas-projects\.vercel\.app$/,
+  /^https:\/\/ceylonprive-travels-.*-anjulas-projects\.vercel\.app$/,
+];
+
 const PORT = parseInt(process.env.PORT || "4000", 10);
 
 // ── Security middleware ───────────────────────────────────────
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+      // 1. Allow server-to-server requests or tools like Postman (no origin)
+      if (!origin) return callback(null, true);
+
+      // 2. Strip trailing slashes from the incoming browser origin string if present
+      const sanitizedOrigin = origin.replace(/\/$/, "");
+
+      const isAllowed = allowedOrigins.some((allowed) => {
+        if (allowed instanceof RegExp) {
+          return allowed.test(sanitizedOrigin);
+        }
+        return allowed === sanitizedOrigin;
+      });
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        console.warn(`🛑 CORS Blocked origin: ${origin}`);
+        callback(new Error("Blocked by CeylonPrivé security CORS policy"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 
