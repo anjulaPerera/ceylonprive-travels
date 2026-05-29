@@ -244,6 +244,97 @@ export default function ContactsDashboardPage() {
                           )}
                         </div>
                       </div>
+
+                      {/* AI Generated Plan */}
+                      {sub.aiGeneratedPlan && (
+                        <div className="md:col-span-2 mt-4 border-t border-gold/10 pt-4">
+                          <p className="text-xs tracking-widest uppercase text-gold font-sans mb-3 flex items-center gap-2">
+                            <Sparkles size={12} />
+                            AI Generated Itinerary They Saw
+                          </p>
+                          {(() => {
+                            const plan = sub.aiGeneratedPlan as {
+                              title?: string;
+                              summary?: string;
+                              duration?: number;
+                              highlights?: string[];
+                              bestTimeToVisit?: string;
+                              days?: Array<{
+                                day: number;
+                                title: string;
+                                location: string;
+                                activities: string[];
+                              }>;
+                            };
+                            return (
+                              <div className="bg-navy border border-gold/10 p-4 space-y-3">
+                                {plan.title && (
+                                  <p className="font-serif text-lg text-cream font-light">
+                                    {plan.title}
+                                  </p>
+                                )}
+                                {plan.summary && (
+                                  <p className="text-cream-dark text-sm font-sans leading-relaxed">
+                                    {plan.summary}
+                                  </p>
+                                )}
+                                <div className="flex flex-wrap gap-3 text-xs text-cream-dark font-sans">
+                                  {plan.duration && (
+                                    <span>🗓️ {plan.duration} days</span>
+                                  )}
+                                  {plan.bestTimeToVisit && (
+                                    <span>
+                                      ☀️ Best time: {plan.bestTimeToVisit}
+                                    </span>
+                                  )}
+                                </div>
+                                {plan.highlights &&
+                                  plan.highlights.length > 0 && (
+                                    <div className="flex flex-wrap gap-2">
+                                      {plan.highlights.map((h: string) => (
+                                        <span
+                                          key={h}
+                                          className="px-2 py-1 border border-gold/20 text-[10px] tracking-widest uppercase text-gold font-sans"
+                                        >
+                                          {h}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
+                                {plan.days && plan.days.length > 0 && (
+                                  <div className="space-y-2 mt-2">
+                                    {plan.days.map(
+                                      (day: {
+                                        day: number;
+                                        title: string;
+                                        location: string;
+                                        activities: string[];
+                                      }) => (
+                                        <div
+                                          key={day.day}
+                                          className="border-l border-gold/20 pl-3"
+                                        >
+                                          <p className="text-cream text-xs font-sans font-medium">
+                                            Day {day.day}: {day.title} ·{" "}
+                                            {day.location}
+                                          </p>
+                                          <p className="text-cream-dark text-xs font-sans mt-0.5">
+                                            {day.activities
+                                              .slice(0, 2)
+                                              .join(" · ")}
+                                            {day.activities.length > 2 &&
+                                              " ..."}
+                                          </p>
+                                        </div>
+                                      ),
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
