@@ -30,13 +30,7 @@ const allowedOrigins: (string | RegExp)[] = [
 
 const PORT = parseInt(process.env.PORT || "4000", 10);
 
-// 1. Explicitly type the array as an array of strings or RegExps 
-const allowedOrigins: (string | RegExp)[] = [
-  'http://localhost:3000',
-  'https://ceylonprive-travels.vercel.app',
-  // Now you can safely use regex wildcards for Vercel preview deployments!
-  /https:\/\/ceylonprive-travels-git-.*-anjulas-projects\.vercel\.app$/,
-];
+
 
 // ── Security middleware ───────────────────────────────────────
 app.use(helmet());
