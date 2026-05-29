@@ -1,6 +1,7 @@
 "use client";
 
 import { Mail, Image as ImageIcon, Star } from "lucide-react";
+import Link from "next/link"; // 1. Import Link
 
 export default function DashboardOverviewPage() {
   return (
@@ -14,9 +15,12 @@ export default function DashboardOverviewPage() {
         </p>
       </div>
 
-      {/* Grid for Quick Metrics/Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="border border-gold/10 bg-navy-light p-6 space-y-2">
+        {/* Enquiries Card wrapped in Link */}
+        <Link
+          href="/dashboard/contacts"
+          className="block border border-gold/10 bg-navy-light p-6 space-y-2 hover:border-gold/30 transition-colors cursor-pointer"
+        >
           <div className="flex justify-between text-gold">
             <span className="text-xs uppercase tracking-widest font-sans">
               Enquiries
@@ -24,9 +28,13 @@ export default function DashboardOverviewPage() {
             <Mail size={18} />
           </div>
           <p className="font-serif text-2xl text-cream">Manage Submissions</p>
-        </div>
+        </Link>
 
-        <div className="border border-gold/10 bg-navy-light p-6 space-y-2">
+        {/* Gallery Card wrapped in Link */}
+        <Link
+          href="/dashboard/gallery"
+          className="block border border-gold/10 bg-navy-light p-6 space-y-2 hover:border-gold/30 transition-colors cursor-pointer"
+        >
           <div className="flex justify-between text-gold">
             <span className="text-xs uppercase tracking-widest font-sans">
               Gallery
@@ -34,9 +42,13 @@ export default function DashboardOverviewPage() {
             <ImageIcon size={18} />
           </div>
           <p className="font-serif text-2xl text-cream">Media Assets</p>
-        </div>
+        </Link>
 
-        <div className="border border-gold/10 bg-navy-light p-6 space-y-2">
+        {/* Reviews Card wrapped in Link */}
+        <Link
+          href="/dashboard/reviews"
+          className="block border border-gold/10 bg-navy-light p-6 space-y-2 hover:border-gold/30 transition-colors cursor-pointer"
+        >
           <div className="flex justify-between text-gold">
             <span className="text-xs uppercase tracking-widest font-sans">
               Reviews
@@ -44,7 +56,7 @@ export default function DashboardOverviewPage() {
             <Star size={18} />
           </div>
           <p className="font-serif text-2xl text-cream">Customer Feedback</p>
-        </div>
+        </Link>
       </div>
     </div>
   );
