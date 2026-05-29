@@ -15,7 +15,10 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+    <section
+      id="hero"
+      className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden dark"
+    >
       {/* Background Image */}
       {/* Using a Sri Lanka landscape — replace with Cloudinary URL later */}
       <div
@@ -27,7 +30,8 @@ export default function Hero() {
 
       {/* Dark overlay — gradient from dark navy to transparent to dark navy */}
       {/* This ensures the text is readable and creates a cinematic feel */}
-      <div className="absolute inset-0 bg-gradient-to-b from-navy/80 via-navy/40 to-navy/90" />
+      {/* Dark overlay — always dark regardless of theme */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/80 via-[#0A0F1E]/40 to-[#0A0F1E]/90" />
 
       {/* Subtle grain texture overlay for luxury feel */}
       <div
