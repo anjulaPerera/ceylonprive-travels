@@ -30,6 +30,14 @@ const allowedOrigins: (string | RegExp)[] = [
 
 const PORT = parseInt(process.env.PORT || "4000", 10);
 
+// 1. Explicitly type the array as an array of strings or RegExps 
+const allowedOrigins: (string | RegExp)[] = [
+  'http://localhost:3000',
+  'https://ceylonprive-travels.vercel.app',
+  // Now you can safely use regex wildcards for Vercel preview deployments!
+  /https:\/\/ceylonprive-travels-git-.*-anjulas-projects\.vercel\.app$/,
+];
+
 // ── Security middleware ───────────────────────────────────────
 app.use(helmet());
 app.use(
@@ -64,6 +72,31 @@ app.use(
 // ── Body parsing ─────────────────────────────────────────────
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+
+      const isAllowed = allowedOrigins.some((allowed) => {
+        // 2. TypeScript now happily accepts this because 'allowed' might be a RegExp!
+        if (allowed instanceof RegExp) {
+          return allowed.test(origin);
+        }
+        return allowed === origin;
+      });
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS policy configuration"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 
 // ── General rate limiting on all API routes ───────────────────
 app.use("/api", generalLimiter);
