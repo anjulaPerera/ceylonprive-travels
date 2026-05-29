@@ -3,8 +3,10 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM = "CeylonPrivé Travels <onboarding@resend.dev>";
-const GUIDE_EMAIL = process.env.GUIDE_EMAIL ?? "mamaduperera222@gmail.com";
-const REPLY_TO = process.env.FROM_EMAIL ?? "mamaduperera222@gmail.com";
+const GUIDE_EMAIL = process.env.GUIDE_EMAIL ?? "anjulaperera98@gmail.com";
+const REPLY_TO = process.env.FROM_EMAIL ?? "anjulaperera98@gmail.com";
+
+const tempCusEmail = "anjulaperera98@gmail.com"; //remove after configuring domains in resend, then use customer email
 
 // ── Send itinerary to customer ────────────────────────────────
 export const sendItineraryEmail = async (
@@ -136,7 +138,7 @@ export const sendItineraryEmail = async (
   await resend.emails.send({
     from: FROM,
     replyTo: REPLY_TO,
-    to: customerEmail,
+    to: tempCusEmail,
     subject: `Your CeylonPrivé Itinerary: ${itinerary.title}`,
     html,
   });
