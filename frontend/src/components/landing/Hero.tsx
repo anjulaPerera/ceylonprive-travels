@@ -7,8 +7,6 @@ import { ChevronDown } from "lucide-react";
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Trigger animations after mount — gives the page time to render
-  // before starting the fade-up sequence
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
     return () => clearTimeout(timer);
@@ -17,10 +15,9 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden dark"
+      className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden bg-[#0A0F1E]"
     >
       {/* Background Image */}
-      {/* Using a Sri Lanka landscape — replace with Cloudinary URL later */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 transition-transform duration-[10000ms]"
         style={{
@@ -28,12 +25,10 @@ export default function Hero() {
         }}
       />
 
-      {/* Dark overlay — gradient from dark navy to transparent to dark navy */}
-      {/* This ensures the text is readable and creates a cinematic feel */}
-      {/* Dark overlay — always dark regardless of theme */}
+      {/* Cinematic Dark Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/80 via-[#0A0F1E]/40 to-[#0A0F1E]/90" />
 
-      {/* Subtle grain texture overlay for luxury feel */}
+      {/* Luxury Grain Texture */}
       <div
         className="absolute inset-0 opacity-20"
         style={{
@@ -41,9 +36,9 @@ export default function Hero() {
         }}
       />
 
-      {/* Content */}
+      {/* Content Container */}
       <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-        {/* Eyebrow text — small label above the headline */}
+        {/* Eyebrow Label */}
         <div
           className={cn(
             "transition-all duration-1000",
@@ -55,10 +50,10 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Main Headline */}
+        {/* Main Headline - Enforced Cream Color */}
         <h1
           className={cn(
-            "font-serif font-light text-cream mb-6 transition-all duration-1000 delay-200",
+            "font-serif font-light !text-cream mb-6 transition-all duration-1000 delay-200",
             "text-5xl md:text-7xl lg:text-8xl leading-tight",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
           )}
@@ -68,7 +63,7 @@ export default function Hero() {
           <span className="text-gradient-gold italic">Like Never Before</span>
         </h1>
 
-        {/* Decorative gold line */}
+        {/* Decorative Divider */}
         <div
           className={cn(
             "flex items-center justify-center gap-4 mb-8 transition-all duration-1000 delay-300",
@@ -82,10 +77,10 @@ export default function Hero() {
           <div className="h-px w-16 bg-gold/60" />
         </div>
 
-        {/* Subheading */}
+        {/* Subheading Description - Enforced Light Text */}
         <p
           className={cn(
-            "font-sans font-light text-cream-dark text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed transition-all duration-1000 delay-500",
+            "font-sans font-light !text-cream-dark text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed transition-all duration-1000 delay-500",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
           )}
         >
@@ -94,25 +89,23 @@ export default function Hero() {
           home.
         </p>
 
-        {/* CTA Buttons */}
+        {/* CTA Actions */}
         <div
           className={cn(
             "flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 delay-700",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
           )}
         >
-          {/* Primary CTA */}
-          <a // 👈 Added missing anchor open tag
+          <a
             href="#contact"
-            className="px-10 py-4 bg-gold text-navy text-sm tracking-[0.2em] uppercase font-sans font-medium hover:bg-gold-light transition-all duration-300 hover:shadow-lg hover:shadow-gold/20"
+            className="px-10 py-4 bg-gold !text-navy text-sm tracking-[0.2em] uppercase font-sans font-medium hover:bg-gold-light transition-all duration-300 hover:shadow-lg hover:shadow-gold/20"
           >
             Plan Your Journey
           </a>
 
-          {/* Secondary CTA */}
-          <a // 👈 Added missing anchor open tag
+          <a
             href="#ai-planner"
-            className="px-10 py-4 border border-gold/60 text-cream text-sm tracking-[0.2em] uppercase font-sans font-light hover:border-gold hover:text-gold transition-all duration-300"
+            className="px-10 py-4 border border-gold/60 !text-cream text-sm tracking-[0.2em] uppercase font-sans font-light hover:border-gold hover:text-gold transition-all duration-300"
           >
             AI Itinerary Planner
           </a>
@@ -126,7 +119,7 @@ export default function Hero() {
           isVisible ? "opacity-100" : "opacity-0",
         )}
       >
-        <span className="text-[10px] tracking-[0.4em] uppercase text-cream-dark/60 font-sans">
+        <span className="text-[10px] tracking-[0.4em] uppercase !text-cream-dark/60 font-sans">
           Scroll
         </span>
         <ChevronDown size={16} className="text-gold animate-bounce" />

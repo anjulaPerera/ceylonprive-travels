@@ -132,3 +132,27 @@ html:not(.dark) .glass {
   background: rgba(245, 240, 232, 0.85);
   border-color: rgba(160, 120, 48, 0.2);
 }
+
+@layer utilities {
+  .glass-luxury {
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  /* When document is in Light Mode and navbar is scrolled */
+  html:not(.dark) .glass-luxury {
+    background-color: rgba(247, 245, 240, 0.75);
+    /* Soft, premium Alabaster/Cream tint */
+    border-bottom: 1px solid rgba(10, 15, 30, 0.06);
+    box-shadow: 0 4px 30px rgba(10, 15, 30, 0.02);
+  }
+
+  /* When document is in Dark Mode and navbar is scrolled */
+  html.dark .glass-luxury {
+    background-color: rgba(10, 15, 30, 0.7);
+    /* Luxury obsidian navy tint */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  }
+}
