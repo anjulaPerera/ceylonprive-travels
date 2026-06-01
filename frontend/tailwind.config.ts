@@ -29,6 +29,13 @@ const config: Config = {
           DEFAULT: "#F5F0E8",
           dark: "#D4C9B0",
         },
+        keyframes: {
+          "luxury-zoom": {
+            "0%": { transform: "scale(1.02)" },
+            "100%": { transform: "scale(1.08)" },
+          },
+        },
+    
       },
       fontFamily: {
         serif: ["var(--font-cormorant)", "Georgia", "serif"],

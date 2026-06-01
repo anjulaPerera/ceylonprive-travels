@@ -4,12 +4,36 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 
+// List your image paths here.
+// You can use local public folder paths or external Unsplash/Cloudinary URLs.
+const heroImages = [
+   "/images/sigiriya.jpg",
+ "/images/bbeach.jpg",
+  "/images/gartmore.jpg",
+  "/images/mirissa2.jpg",
+  "/images/nnine arch.jpg",
+  "/images/ppinnawala.jpg",
+];
+
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
+  const [currentIdx, setCurrentIdx] = useState(0);
 
+  // Trigger initial fade-in animations on load
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Handle automatic slideshow cycling every 6 seconds
+  useEffect(() => {
+    if (heroImages.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIdx((prevIdx) => (prevIdx + 1) % heroImages.length);
+    }, 6000); // 6000ms = 6 seconds per luxury image slide
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -17,27 +41,41 @@ export default function Hero() {
       id="hero"
       className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden bg-[#0A0F1E]"
     >
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 transition-transform duration-[10000ms]"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?q=80&w=2070')`,
-        }}
-      />
+      <div className="absolute inset-0 z-0 bg-[#0A0F1E]">
+        {heroImages.map((src, idx) => {
+          const isActive = idx === currentIdx;
 
-      {/* Cinematic Dark Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E]/80 via-[#0A0F1E]/40 to-[#0A0F1E]/90" />
-
+          return (
+            <div
+              key={src}
+              className={cn(
+                "absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity ease-in-out",
+                isActive
+                  ? "opacity-100 z-10 duration-[3000ms]"
+                  : "opacity-0 z-0 duration-[3000ms] delay-500",
+              )}
+              style={{
+                backgroundImage: `url('${src}')`,
+                // Use inline animation configuration to keep the scale perfectly continuous
+                animation: isActive
+                  ? "luxury-zoom 8000ms ease-out forwards"
+                  : "none",
+              }}
+            />
+          );
+        })}
+      </div>
+      {/* Cinematic Dark Overlay — Always blocks light-theme cascading colors */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#0A0F1E]/80 via-[#0A0F1E]/40 to-[#0A0F1E]/90" />
       {/* Luxury Grain Texture */}
       <div
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 z-10 opacity-20"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E")`,
         }}
       />
-
-      {/* Content Container */}
-      <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+      {/* Content Layer */}
+      <div className="relative z-20 text-center px-6 max-w-5xl mx-auto">
         {/* Eyebrow Label */}
         <div
           className={cn(
@@ -50,7 +88,7 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Main Headline - Enforced Cream Color */}
+        {/* Main Headline */}
         <h1
           className={cn(
             "font-serif font-light !text-cream mb-6 transition-all duration-1000 delay-200",
@@ -77,7 +115,7 @@ export default function Hero() {
           <div className="h-px w-16 bg-gold/60" />
         </div>
 
-        {/* Subheading Description - Enforced Light Text */}
+        {/* Subheading Description */}
         <p
           className={cn(
             "font-sans font-light !text-cream-dark text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed transition-all duration-1000 delay-500",
@@ -111,7 +149,6 @@ export default function Hero() {
           </a>
         </div>
       </div>
-
       {/* Scroll Indicator */}
       <div
         className={cn(
