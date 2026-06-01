@@ -234,7 +234,7 @@ export default function GalleryDashboardPage() {
                   htmlFor="file-drop"
                   className="block text-xs tracking-widest uppercase text-gold font-sans mb-2"
                 >
-                  Title *
+                  IMAGE *
                 </label>
                 <input
                   id="file-drop"
